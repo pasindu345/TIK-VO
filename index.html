@@ -37,6 +37,10 @@
         button:hover {
             background-color: #e62e4c;
         }
+        #downloadBtn {
+            display: none;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -45,6 +49,8 @@
         <input type="text" id="videoUrl" placeholder="Enter TikTok video URL">
         <br>
         <button onclick="redirectToAds()">Download</button>
+        <br>
+        <button id="downloadBtn" onclick="downloadVideo()">Click here to Download</button>
     </div><script>
     function redirectToAds() {
         const videoUrl = document.getElementById('videoUrl').value;
@@ -57,11 +63,18 @@
         window.location.href = "https://www.effectiveratecpm.com/n8cufexbk?key=3a16df1a32d0b12a99405a5185799023";
     }
 
-    window.onload = function() {
+    function downloadVideo() {
         const storedUrl = localStorage.getItem("downloadUrl");
         if (storedUrl) {
             localStorage.removeItem("downloadUrl");
             window.location.href = `https://tiktok-downloader.apis-bj-devs.workers.dev/?url=${encodeURIComponent(storedUrl)}`;
+        }
+    }
+
+    window.onload = function() {
+        const storedUrl = localStorage.getItem("downloadUrl");
+        if (storedUrl) {
+            document.getElementById("downloadBtn").style.display = "block";
         }
     };
 </script>
