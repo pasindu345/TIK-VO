@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #ff3b5c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e62e4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>TikTok Video Downloader</h2>
+        <input type="text" id="videoUrl" placeholder="Enter TikTok video URL">
+        <br>
+        <button onclick="redirectToAds()">Download</button>
+    </div><script>
+    function redirectToAds() {
+        const videoUrl = document.getElementById('videoUrl').value;
+        if (!videoUrl) {
+            alert("Please enter a valid TikTok URL");
+            return;
+        }
+        
+        sessionStorage.setItem("downloadUrl", videoUrl);
+        window.location.href = "https://www.effectiveratecpm.com/n8cufexbk?key=3a16df1a32d0b12a99405a5185799023";
+    }
+
+    window.onload = function() {
+        const storedUrl = sessionStorage.getItem("downloadUrl");
+        if (storedUrl) {
+            sessionStorage.removeItem("downloadUrl");
+            window.location.href = `https://tiktok-downloader.apis-bj-devs.workers.dev/?url=${encodeURIComponent(storedUrl)}`;
+        }
+    };
+</script>
+
+</body>
+</html>
