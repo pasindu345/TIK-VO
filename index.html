@@ -53,14 +53,14 @@
             return;
         }
         
-        sessionStorage.setItem("downloadUrl", videoUrl);
+        localStorage.setItem("downloadUrl", videoUrl);
         window.location.href = "https://www.effectiveratecpm.com/n8cufexbk?key=3a16df1a32d0b12a99405a5185799023";
     }
 
     window.onload = function() {
-        const storedUrl = sessionStorage.getItem("downloadUrl");
+        const storedUrl = localStorage.getItem("downloadUrl");
         if (storedUrl) {
-            sessionStorage.removeItem("downloadUrl");
+            localStorage.removeItem("downloadUrl");
             window.location.href = `https://tiktok-downloader.apis-bj-devs.workers.dev/?url=${encodeURIComponent(storedUrl)}`;
         }
     };
