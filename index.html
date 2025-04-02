@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Downloader</title>
+    <title>TikTok Video Downloader</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,73 +12,127 @@
             align-items: center;
             height: 100vh;
             background-color: #f4f4f4;
+            margin: 0;
         }
         .container {
             text-align: center;
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
         }
         input {
             width: 80%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 12px;
+            margin: 15px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
         }
         button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background-color: #ff3b5c;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #e62e4c;
         }
         #downloadBtn {
             display: none;
-            margin-top: 10px;
+            margin-top: 15px;
+            background-color: #25D366;
+        }
+        #downloadBtn:hover {
+            background-color: #1EBE53;
+        }
+        .instructions {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>TikTok Video Downloader</h2>
-        <input type="text" id="videoUrl" placeholder="Enter TikTok video URL">
-        <br>
+        <h1>TikTok Video Downloader</h1>
+        <input type="text" id="videoUrl" placeholder="Paste TikTok video URL here...">
         <button onclick="redirectToAds()">Download</button>
-        <br>
-        <button id="downloadBtn" onclick="downloadVideo()">Click here to Download</button>
-    </div><script>
-    function redirectToAds() {
-        const videoUrl = document.getElementById('videoUrl').value;
-        if (!videoUrl) {
-            alert("Please enter a valid TikTok URL");
-            return;
-        }
-        
-        localStorage.setItem("downloadUrl", videoUrl);
-        window.location.href = "https://www.effectiveratecpm.com/n8cufexbk?key=3a16df1a32d0b12a99405a5185799023";
-    }
+        <button id="downloadBtn" onclick="downloadVideo()">Download Now</button>
+        <div class="instructions" id="instructions">
+            After returning from ads, click "Download Now" to get your video.
+        </div>
+    </div>
 
-    function downloadVideo() {
-        const storedUrl = localStorage.getItem("downloadUrl");
-        if (storedUrl) {
-            localStorage.removeItem("downloadUrl");
-            window.location.href = `https://tiktok-downloader.apis-bj-devs.workers.dev/?url=${encodeURIComponent(storedUrl)}`;
+    <script>
+        function redirectToAds() {
+            const videoUrl = document.getElementById('videoUrl').value.trim();
+            if (!videoUrl || !videoUrl.includes('tiktok.com')) {
+                alert("Please enter a valid TikTok URL");
+                return;
+            }
+            
+            // Save the URL to localStorage
+            localStorage.setItem("downloadUrl", videoUrl);
+            
+            // Redirect to ads
+            window.location.href = "https://www.effectiveratecpm.com/n8cufexbk?key=3a16df1a32d0b12a99405a5185799023";
         }
-    }
 
-    window.onload = function() {
-        const storedUrl = localStorage.getItem("downloadUrl");
-        if (storedUrl) {
-            document.getElementById("downloadBtn").style.display = "block";
+        function downloadVideo() {
+            const storedUrl = localStorage.getItem("downloadUrl");
+            if (storedUrl) {
+                // First try to download directly
+                fetch(`https://tiktok-downloader.apis-bj-devs.workers.dev/?url=${encodeURIComponent(storedUrl)}`)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Network response was not ok');
+                    })
+                    .then(data => {
+                        if (data.videoUrl) {
+                            // Create a temporary link to download the video
+                            const a = document.createElement('a');
+                            a.href = data.videoUrl;
+                            a.target = '_blank';
+                            a.download = 'tiktok-video.mp4';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        } else {
+                            // Fallback to Google Video Player
+                            window.open(`https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(data.videoUrl)}`, '_blank');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Fallback to Google Video Player with the original URL
+                        window.open(`https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(storedUrl)}`, '_blank');
+                    });
+                
+                // Clear the stored URL
+                localStorage.removeItem("downloadUrl");
+                document.getElementById("downloadBtn").style.display = "none";
+            }
         }
-    };
-</script>
 
+        window.onload = function() {
+            const storedUrl = localStorage.getItem("downloadUrl");
+            if (storedUrl) {
+                document.getElementById("downloadBtn").style.display = "block";
+                document.getElementById("videoUrl").value = storedUrl;
+                document.getElementById("instructions").style.display = "block";
+            } else {
+                document.getElementById("instructions").style.display = "none";
+            }
+        };
+    </script>
 </body>
 </html>
